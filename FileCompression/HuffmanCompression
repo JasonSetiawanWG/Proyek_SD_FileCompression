@@ -1,12 +1,14 @@
 import java.util.*;
+// sherleen's
 
-// Class untuk simpul pada pohon Huffman
+
 class HuffmanNode {
-    int frequency;
-    char character;
-    HuffmanNode left;
-    HuffmanNode right;
+    int frequency;   
+    char character;  
+    HuffmanNode left;  // child kiri
+    HuffmanNode right; // child kanan
 
+    // Constructor bwt bikin simpul baru
     HuffmanNode(char character, int frequency) {
         this.character = character;
         this.frequency = frequency;
@@ -15,71 +17,71 @@ class HuffmanNode {
     }
 }
 
-// Comparator untuk mengurutkan simpul berdasarkan frekuensi
+// comparator buat urutin node berdasarkan frekuensi (PENTINGGG bwt PriorityQueue)
 class NodeComparator implements Comparator<HuffmanNode> {
     public int compare(HuffmanNode x, HuffmanNode y) {
-        return x.frequency - y.frequency;
+        return x.frequency - y.frequency; //frekuensi kecil di depan
     }
 }
 
 public class HuffmanCompression {
-    
-    // Membuat peta HuffmanCode untuk setiap karakter
+
     public static void buildHuffmanCode(HuffmanNode root, String code, Map<Character, String> huffmanCode) {
         if (root == null) {
-            return;
+            return; //klo udah mentok
         }
 
-        // Jika simpul adalah daun, tambahkan kode ke peta
+        //klo node ini adalah daun (punya karakter), tambahin ke map
         if (root.left == null && root.right == null) {
             huffmanCode.put(root.character, code);
         }
 
+        // rekurs ke anak kiri (tambah '0') and kanan (tambah '1')
         buildHuffmanCode(root.left, code + "0", huffmanCode);
         buildHuffmanCode(root.right, code + "1", huffmanCode);
     }
 
     public static void main(String[] args) {
-        // Input string untuk dikompresi
+        // String yg mw dikompres
         String input = "sherleen";
 
-        // Hitung frekuensi setiap karakter
+        //ngitung frekuensi tiap karakter
         Map<Character, Integer> frequencyMap = new HashMap<>();
         for (char c : input.toCharArray()) {
             frequencyMap.put(c, frequencyMap.getOrDefault(c, 0) + 1);
         }
 
-        // Buat prioritas queue untuk pohon Huffman
+        // PriorityQueue bwt bikin hhuffman tree
         PriorityQueue<HuffmanNode> priorityQueue = new PriorityQueue<>(new NodeComparator());
 
-        // Buat simpul Huffman untuk setiap karakter dan tambahkan ke queue
+        // mbikin node untuk setiap karakter n frekuensi, masukin ke queue
         for (Map.Entry<Character, Integer> entry : frequencyMap.entrySet()) {
             priorityQueue.add(new HuffmanNode(entry.getKey(), entry.getValue()));
         }
 
-        // Bangun pohon Huffman
+        // mbangun huffman tree
         while (priorityQueue.size() > 1) {
+            // ngambill 2 node dgn frekuensi paling kecil
             HuffmanNode left = priorityQueue.poll();
             HuffmanNode right = priorityQueue.poll();
 
-            // Gabungkan dua simpul dengan frekuensi terendah
+            // gabungin mereka jadi node baru (frekuensi = jumlah dua node)
             HuffmanNode newNode = new HuffmanNode('-', left.frequency + right.frequency);
             newNode.left = left;
             newNode.right = right;
+
+            // input node baru ke queue
             priorityQueue.add(newNode);
         }
 
-        // Akar pohon Huffman
         HuffmanNode root = priorityQueue.poll();
 
-        // Bangun HuffmanCode dari pohon
         Map<Character, String> huffmanCode = new HashMap<>();
         buildHuffmanCode(root, "", huffmanCode);
 
-        // Cetak HuffmanCode
         System.out.println("Huffman Codes: " + huffmanCode);
 
-        // Encode input string ke HuffCodeBytes
+        // Encode string input ke  Huffman code
         StringBuilder encodedString = new StringBuilder();
         for (char c : input.toCharArray()) {
             encodedString.append(huffmanCode.get(c));
@@ -87,14 +89,13 @@ public class HuffmanCompression {
 
         System.out.println("Encoded String: " + encodedString);
 
-        // Konversi encodedString ke array byte
+        //  encoded string -->> byte array
         byte[] huffCodeBytes = encodedString.toString().getBytes();
-        
-        // Tampilkan hasil HuffCodeBytes
+
         System.out.println("Compressed Bytes: " + Arrays.toString(huffCodeBytes));
 
-        // Informasi tambahan untuk tugasmu
         System.out.println("Original Bytes: " + Arrays.toString(input.getBytes()));
+
         System.out.println("Compression Ratio: " + (double) huffCodeBytes.length / input.getBytes().length);
     }
 }
