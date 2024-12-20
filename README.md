@@ -36,6 +36,8 @@ Yang mengerjakan : 2 orang(Jason & Joshua)
 
 # Example of HuffmanTree
 ![image](https://github.com/user-attachments/assets/ce1a3480-398a-44b4-adab-409385af155b)
+![image](https://github.com/user-attachments/assets/6557a90b-ff9b-40ea-bb57-6b26db6733b2)
+
 
 # Example of BitMap represented in Hexadecimal values
 ![Example of Bitmap represented in Hexadecimal Values](https://github.com/user-attachments/assets/6a2a6113-7b6f-45af-a8ab-0b7d74239afa)
