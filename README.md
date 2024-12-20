@@ -35,8 +35,7 @@ Yang mengerjakan : 2 orang(Jason & Joshua)
 ![FileCompression_CD (1)](https://github.com/user-attachments/assets/b22dec96-6f26-4746-b10d-a195997e7a07)
 
 # Example of HuffmanTree
-![image](https://github.com/user-attachments/assets/3abeb87d-d25c-4df6-b744-c9c05a06d6fe)
-
+![image](https://github.com/user-attachments/assets/ce1a3480-398a-44b4-adab-409385af155b)
 
 # Example of BitMap represented in Hexadecimal values
 ![Example of Bitmap represented in Hexadecimal Values](https://github.com/user-attachments/assets/6a2a6113-7b6f-45af-a8ab-0b7d74239afa)
