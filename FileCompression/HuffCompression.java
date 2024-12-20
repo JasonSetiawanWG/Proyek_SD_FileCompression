@@ -163,9 +163,72 @@ public class HuffCompression {
             return str0.substring(str0.length() - 8);
         else return str0;
     }
+    //Image Compression
+    //Graphic of an image consist 2,they are raster graphics and vector graphics
+    //Raster images are resolution-dependent, meaning that zooming in or enlarging them
+    // will cause them to lose quality and become pixelated.
+    //On the other hand,Vector graphics are resolution-independent, meaning they can be scaled without losing quality.
+    //In this scenario,we will do a compression to a BMP File,where it is an uncompressed raster graphics
+    //BMP File usually uses 24bit(3bytes) per pixel for color channel,where it represents RGB Colors,where every color has
+    //1 byte size,so it can adjust the depths of the color in the range of : 1-255
+
+    public static void compressImage(String srcImagePath, String dstCompressedPath) {
+        try {
+            // Reading the file as an array of byte
+            FileInputStream inStream = new FileInputStream(srcImagePath);
+            byte[] imageBytes = inStream.readAllBytes();
+            inStream.close();
+
+            // Compressing the bytes with Huffman
+            byte[] huffmanBytes = createZip(imageBytes);
+
+            // Writing the result
+            FileOutputStream outStream = new FileOutputStream(dstCompressedPath);
+            ObjectOutputStream objectOutStream = new ObjectOutputStream(outStream);
+            objectOutStream.writeObject(huffmanBytes);
+            objectOutStream.writeObject(huffmap);
+            objectOutStream.close();
+            outStream.close();
+
+            System.out.println("Gambar berhasil dikompresi dan disimpan ke: " + dstCompressedPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void decompressImage(String srcCompressedPath, String dstImagePath) {
+        try {
+            //
+            FileInputStream inStream = new FileInputStream(srcCompressedPath);
+            ObjectInputStream objectInStream = new ObjectInputStream(inStream);
+
+            // Membaca data terkompresi dan peta Huffman
+            byte[] huffmanBytes = (byte[]) objectInStream.readObject();
+            Map<Byte, String> huffmanCodes = (Map<Byte, String>) objectInStream.readObject();
+            objectInStream.close();
+            inStream.close();
+
+            // Dekompresi byte array
+            byte[] decompressedBytes = decomp(huffmanCodes, huffmanBytes);
+
+            // Menulis kembali data dekompresi ke file gambar
+            FileOutputStream outStream = new FileOutputStream(dstImagePath);
+            outStream.write(decompressedBytes);
+            outStream.close();
+
+            System.out.println("Gambar berhasil didekompresi dan disimpan ke: " + dstImagePath);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
+        //Compressing Text File
         compress("C:\\Users\\USER\\OneDrive\\Desktop\\Story Original.txt","C:\\Users\\USER\\OneDrive\\Desktop\\Story Original(Compressed).txt");
         decompress("C:\\Users\\USER\\OneDrive\\Desktop\\Story Original(Compressed).txt","C:\\Users\\USER\\OneDrive\\Desktop\\Story Original(Uncompressed).txt");
+
+        
+        //Compressing BMP File
+        compressImage("C:\\Users\\USER\\OneDrive\\Desktop\\sample_5184×3456.bmp","C:\\Users\\USER\\OneDrive\\Desktop\\sample_5184×3456(Compressed).bmp");
+        decompressImage("C:\\Users\\USER\\OneDrive\\Desktop\\sample_5184×3456(Compressed).bmp","C:\\Users\\USER\\OneDrive\\Desktop\\sample_5184×3456(Uncompressed).bmp");
     }
 }
