@@ -125,30 +125,40 @@ public class HuffCompression {
     }
 
     public static byte[] decomp(Map<Byte, String> huffmanCodes, byte[] huffmanBytes) {
+        // StringBuilder to hold the concatenated binary representation of all bytes
         StringBuilder sb1 = new StringBuilder();
         for (int i=0; i<huffmanBytes.length; i++) {
             byte b = huffmanBytes[i];
+            // Flag to check if the current byte is the last one in the array
             boolean flag = (i == huffmanBytes.length - 1);
+            // Append the binary representation of the current byte
             sb1.append(convertbyteInBit(!flag, b));
         }
+
+        // Reverse mapping from Huffman code (String) to the corresponding byte value
         Map<String, Byte> map = new HashMap<>();
         for (Map.Entry<Byte, String> entry : huffmanCodes.entrySet()) {
             map.put(entry.getValue(), entry.getKey());
         }
+
+        // Decode the binary string back into the original bytes
         java.util.List<Byte> list = new java.util.ArrayList<>();
         for (int i = 0; i < sb1.length();) {
-            int count = 1;
-            boolean flag = true;
+            int count = 1; // Length of the current Huffman code being checked
+            boolean flag = true; // Indicates whether a matching code has been found
             Byte b = null;
             while (flag) {
+                // Extract a substring representing a potential Huffman code
                 String key = sb1.substring(i, i + count);
                 b = map.get(key);
-                if (b == null) count++;
-                else flag = false;
+                if (b == null) count++; // If no match, increase the substring length
+                else flag = false; // Match found, exit the loop
             }
-            list.add(b);
-            i += count;
+            list.add(b); // Add the decoded byte to the list
+            i += count; // Move the index forward by the length of the matched code
         }
+
+        // Convert the list of bytes to a byte array
         byte b[] = new byte[list.size()];
         for (int i = 0; i < b.length; i++)
             b[i] = list.get(i);
@@ -156,13 +166,19 @@ public class HuffCompression {
     }
 
     private static String convertbyteInBit(boolean flag, byte b) {
+        // Convert the byte to an integer for manipulation
         int byte0 = b;
+        // If not the last byte, set the 9th bit to ensure proper binary representation
         if (flag) byte0 |= 256;
+        // Convert the integer to a binary string
         String str0 = Integer.toBinaryString(byte0);
+        // Return the last 8 bits of the binary string for proper formatting
         if (flag || byte0 < 0)
             return str0.substring(str0.length() - 8);
         else return str0;
     }
+
+    
     //Image Compression
     //Graphic of an image consist 2,they are raster graphics and vector graphics
     //Raster images are resolution-dependent, meaning that zooming in or enlarging them
