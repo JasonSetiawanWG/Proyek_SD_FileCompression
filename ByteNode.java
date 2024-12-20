@@ -5,9 +5,8 @@ public class ByteNode implements Comparable<ByteNode>{
     Byte data;
     int frequency;
 
-    // in TestByteNode for demo
-    //ByteNode left;
-    //ByteNode right;
+    ByteNode left;
+    ByteNode right;
 
     //creating ByteNode class,
     //Input : AABBBCCCCC
