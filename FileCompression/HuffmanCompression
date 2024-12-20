@@ -1,0 +1,100 @@
+import java.util.*;
+
+// Class untuk simpul pada pohon Huffman
+class HuffmanNode {
+    int frequency;
+    char character;
+    HuffmanNode left;
+    HuffmanNode right;
+
+    HuffmanNode(char character, int frequency) {
+        this.character = character;
+        this.frequency = frequency;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+// Comparator untuk mengurutkan simpul berdasarkan frekuensi
+class NodeComparator implements Comparator<HuffmanNode> {
+    public int compare(HuffmanNode x, HuffmanNode y) {
+        return x.frequency - y.frequency;
+    }
+}
+
+public class HuffmanCompression {
+    
+    // Membuat peta HuffmanCode untuk setiap karakter
+    public static void buildHuffmanCode(HuffmanNode root, String code, Map<Character, String> huffmanCode) {
+        if (root == null) {
+            return;
+        }
+
+        // Jika simpul adalah daun, tambahkan kode ke peta
+        if (root.left == null && root.right == null) {
+            huffmanCode.put(root.character, code);
+        }
+
+        buildHuffmanCode(root.left, code + "0", huffmanCode);
+        buildHuffmanCode(root.right, code + "1", huffmanCode);
+    }
+
+    public static void main(String[] args) {
+        // Input string untuk dikompresi
+        String input = "sherleen";
+
+        // Hitung frekuensi setiap karakter
+        Map<Character, Integer> frequencyMap = new HashMap<>();
+        for (char c : input.toCharArray()) {
+            frequencyMap.put(c, frequencyMap.getOrDefault(c, 0) + 1);
+        }
+
+        // Buat prioritas queue untuk pohon Huffman
+        PriorityQueue<HuffmanNode> priorityQueue = new PriorityQueue<>(new NodeComparator());
+
+        // Buat simpul Huffman untuk setiap karakter dan tambahkan ke queue
+        for (Map.Entry<Character, Integer> entry : frequencyMap.entrySet()) {
+            priorityQueue.add(new HuffmanNode(entry.getKey(), entry.getValue()));
+        }
+
+        // Bangun pohon Huffman
+        while (priorityQueue.size() > 1) {
+            HuffmanNode left = priorityQueue.poll();
+            HuffmanNode right = priorityQueue.poll();
+
+            // Gabungkan dua simpul dengan frekuensi terendah
+            HuffmanNode newNode = new HuffmanNode('-', left.frequency + right.frequency);
+            newNode.left = left;
+            newNode.right = right;
+            priorityQueue.add(newNode);
+        }
+
+        // Akar pohon Huffman
+        HuffmanNode root = priorityQueue.poll();
+
+        // Bangun HuffmanCode dari pohon
+        Map<Character, String> huffmanCode = new HashMap<>();
+        buildHuffmanCode(root, "", huffmanCode);
+
+        // Cetak HuffmanCode
+        System.out.println("Huffman Codes: " + huffmanCode);
+
+        // Encode input string ke HuffCodeBytes
+        StringBuilder encodedString = new StringBuilder();
+        for (char c : input.toCharArray()) {
+            encodedString.append(huffmanCode.get(c));
+        }
+
+        System.out.println("Encoded String: " + encodedString);
+
+        // Konversi encodedString ke array byte
+        byte[] huffCodeBytes = encodedString.toString().getBytes();
+        
+        // Tampilkan hasil HuffCodeBytes
+        System.out.println("Compressed Bytes: " + Arrays.toString(huffCodeBytes));
+
+        // Informasi tambahan untuk tugasmu
+        System.out.println("Original Bytes: " + Arrays.toString(input.getBytes()));
+        System.out.println("Compression Ratio: " + (double) huffCodeBytes.length / input.getBytes().length);
+    }
+}
