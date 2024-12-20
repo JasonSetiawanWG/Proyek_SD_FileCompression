@@ -4,7 +4,7 @@ Theme : File Compression
 Data Structure used : Heap Tree dan HashMap
 Objective : Reduce the size of a file for a faster data transmission and saving storage. And for certain context,it can also be used for encryption.
 
-Basic Concept : ASCII Characters from 1-127 are represented in 8 bits/1 byte. The assigned values for each bits in the byte,needs chart/encoder/mapping to be converted as character,otherwise it just stays as an 8 bit integer. In this assignment,we are gonna shorten the size of bits from each characters,based on the frequency of each characters.
+Basic Concept : ASCII Characters from 1-255 are represented in 8 bits/1 byte. The assigned values for each bits in the byte,needs chart/encoder/mapping to be converted as character,otherwise it just stays as an 8 bit integer. In this assignment,we are gonna shorten the size of bits from each characters,based on the frequency of each characters.
 
 Job desk :
 - Assigning Byte Nodes with the string or array of bytes input (getByteNodes method),creating MinPriorityQueue class,creating ByteNode class,
@@ -32,8 +32,11 @@ Yang mengerjakan : 2 orang(Jason & Joshua)
 
 # Class Diagram
 
-
 ![FileCompression_CD (1)](https://github.com/user-attachments/assets/b22dec96-6f26-4746-b10d-a195997e7a07)
+
+# Example of HuffmanTree
+![image](https://github.com/user-attachments/assets/3abeb87d-d25c-4df6-b744-c9c05a06d6fe)
+
 
 # Example of BitMap represented in Hexadecimal values
 ![Example of Bitmap represented in Hexadecimal Values](https://github.com/user-attachments/assets/6a2a6113-7b6f-45af-a8ab-0b7d74239afa)
